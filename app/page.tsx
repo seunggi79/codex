@@ -63,7 +63,7 @@ export default function Home() {
           type="submit"
           className="h-11 rounded-md bg-black px-4 font-medium text-white hover:bg-zinc-800"
         >
-          추가
+          추 가
         </button>
       </form>
 
@@ -90,7 +90,7 @@ export default function Home() {
               onClick={() => removeTodo(todo.id)}
               className="ml-3 rounded px-2 py-1 text-sm text-red-600 hover:bg-red-50"
             >
-              삭제
+              삭 제
             </button>
           </li>
         ))}
