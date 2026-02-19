@@ -1,3 +1,5 @@
-﻿export default function Home() {
-  return <div>Hello world</div>;
+﻿import { WavesDemo } from "@/components/main/wave";
+
+export default function Home() {
+  return <WavesDemo />;
 }
