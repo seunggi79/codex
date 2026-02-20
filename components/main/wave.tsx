@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import * as React from "react";
 import { Waves } from "@/components/ui/wave-background";
 
@@ -51,10 +52,13 @@ export function WavesDemo() {
             </div>
 
             <div className="absolute bottom-8 left-6 right-6 md:bottom-12 md:left-12 md:right-auto">
-              <button className="group flex items-center gap-3 rounded-full border border-white/40 bg-white/[0.06] px-6 py-3 text-xs tracking-[0.14em] text-white backdrop-blur-sm transition hover:bg-white/15">
+              <Link
+                href="/auth"
+                className="group flex items-center gap-3 rounded-full border border-white/40 bg-white/[0.06] px-6 py-3 text-xs tracking-[0.14em] text-white backdrop-blur-sm transition hover:bg-white/15"
+              >
                 GET STARTED
                 <span className="h-1.5 w-1.5 rounded-full bg-white transition group-hover:translate-x-1" />
-              </button>
+              </Link>
             </div>
           </div>
           <div className="h-px w-full bg-white/80" />
