@@ -1,8 +1,47 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase/client";
 import { Waves } from "@/components/ui/wave-background";
 
 export default function AuthPage() {
+  const { user, loading, signOut } = useAuth();
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const callbackUrl = useMemo(() => {
+    if (typeof window === "undefined") return undefined;
+    return `${window.location.origin}/auth/callback`;
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    if (!callbackUrl) return;
+    setAuthError(null);
+    setAuthLoading(true);
+    await signOut();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: callbackUrl,
+      },
+    });
+
+    if (error) {
+      setAuthLoading(false);
+      setAuthError(error.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setAuthLoading(true);
+    await signOut();
+    setAuthLoading(false);
+  };
+
+  const isBusy = loading || authLoading;
+
   return (
     <div className="min-h-screen w-full bg-black text-white">
       <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
@@ -43,13 +82,33 @@ export default function AuthPage() {
                 <p className="mt-4 text-sm text-white/78 md:text-base">
                   로그인과 회원가입은 자동으로 처리됩니다. Google 계정 하나로 바로 이용할 수 있습니다.
                 </p>
+                {authError ? <p className="mt-4 text-sm text-red-300">{authError}</p> : null}
 
-                <button className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18">
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
-                    G
-                  </span>
-                  CONTINUE WITH GOOGLE
-                </button>
+                {user ? (
+                  <>
+                    <p className="mt-8 text-xs tracking-[0.12em] text-white/75">
+                      LOGGED IN AS {user.email}
+                    </p>
+                    <button
+                      onClick={handleSignOut}
+                      disabled={isBusy}
+                      className="group mt-3 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      SIGN OUT
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleGoogleLogin}
+                    disabled={isBusy}
+                    className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
+                      G
+                    </span>
+                    {isBusy ? "LOADING..." : "CONTINUE WITH GOOGLE"}
+                  </button>
+                )}
               </div>
             </div>
           </div>
