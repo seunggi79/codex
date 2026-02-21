@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 import { type AuthUser } from "@/lib/supabase/client";
 
 type DashboardNavbarProps = {
@@ -11,6 +12,14 @@ type DashboardNavbarProps = {
 
 export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
   const profileInitial = (user.email?.trim().charAt(0) || "C").toUpperCase();
+  const { initialX, initialY, initialRotate } = useMemo(
+    () => ({
+      initialX: 34 + Math.floor(Math.random() * 33),
+      initialY: 36 + Math.floor(Math.random() * 29),
+      initialRotate: -12 + Math.floor(Math.random() * 25),
+    }),
+    [],
+  );
 
   return (
     <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
@@ -36,7 +45,14 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
         >
           <div className="relative h-9 w-9 rotate-[-6deg] overflow-hidden border border-white/35 bg-white/10 [border-radius:42%_58%_61%_39%_/_44%_40%_60%_56%]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.75),rgba(255,255,255,0.15)_46%,rgba(255,255,255,0.06)_75%)]" />
-            <span className="relative z-10 flex h-full w-full items-center justify-center text-[11px] font-semibold tracking-[0.08em] text-black/70">
+            <span
+              className="absolute z-10 text-[11px] font-semibold leading-none tracking-[0.08em] text-black/70"
+              style={{
+                left: `${initialX}%`,
+                top: `${initialY}%`,
+                transform: `translate(-50%, -50%) rotate(${initialRotate}deg)`,
+              }}
+            >
               {profileInitial}
             </span>
           </div>
