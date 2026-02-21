@@ -3,13 +3,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { GalleryItem } from "@/lib/supabase/thumbnails";
+import { LoadRipple } from "@/components/ui/load-ripple";
 
 type GeneratedGalleryProps = {
   items: GalleryItem[];
   onDelete: (item: GalleryItem) => Promise<void> | void;
+  isLoading?: boolean;
 };
 
-export function GeneratedGallery({ items, onDelete }: GeneratedGalleryProps) {
+export function GeneratedGallery({ items, onDelete, isLoading = false }: GeneratedGalleryProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
@@ -51,7 +53,12 @@ export function GeneratedGallery({ items, onDelete }: GeneratedGalleryProps) {
           </div>
 
           <div className="rounded-[24px] border border-white/20 bg-white/[0.04] px-5 py-8 backdrop-blur-sm">
-            {items.length === 0 ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center">
+                <LoadRipple />
+                <p className="mt-2 text-center text-xs tracking-[0.12em] text-white/75">LOADING GALLERY...</p>
+              </div>
+            ) : items.length === 0 ? (
               <p className="text-center text-sm text-white/65">아직 생성된 이미지가 없습니다.</p>
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

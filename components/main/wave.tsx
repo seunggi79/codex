@@ -26,33 +26,14 @@ export function WavesDemo({ ctaHref = "/auth", ctaLabel = "GET STARTED" }: Waves
           </span>
         </Link>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <a
-            href="#"
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/25 bg-white/[0.06] px-4 py-2.5 text-xs leading-none tracking-[0.12em] text-white/88 shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:bg-white/[0.14]"
-          >
-            Features
-          </a>
-          <a
-            href="#"
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/25 bg-white/[0.06] px-4 py-2.5 text-xs leading-none tracking-[0.12em] text-white/88 shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:bg-white/[0.14]"
-          >
-            Pricing
-          </a>
-          <a
-            href="#"
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-white/25 bg-white/[0.06] px-4 py-2.5 text-xs leading-none tracking-[0.12em] text-white/88 shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:bg-white/[0.14]"
-          >
-            Contact
-          </a>
-        </div>
       </nav>
 
       <section className="w-full px-4 pb-6 md:px-6 md:pb-8">
         <div className="mx-auto w-full max-w-7xl">
           <div className="h-px w-full bg-white/80" />
           <div className="relative mt-0 w-full overflow-hidden rounded-none md:rounded-sm" style={{ minHeight: "78vh" }}>
-            <Waves className="h-full w-full" />
+            <Waves className="h-full w-full" strokeColor="rgba(235,235,235,0.52)" pointerSize={0.42} />
+            <div className="pointer-events-none absolute inset-0 bg-black/30" />
             <div className="pointer-events-none absolute inset-0 flex items-center">
               <div className="px-6 md:px-12">
                 <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl lg:text-8xl">

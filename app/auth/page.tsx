@@ -73,10 +73,12 @@ export default function AuthPage() {
               <div className="relative w-full max-w-lg rounded-[30px] border border-white/30 bg-white/[0.08] p-5 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl md:p-6">
                 <Link
                   href="/"
-                  className="absolute right-5 top-5 inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 text-[11px] leading-none tracking-[0.12em] text-white/85 shadow-[0_10px_24px_rgba(0,0,0,0.35)] transition hover:bg-white/[0.14] hover:text-white md:right-6 md:top-7"
+                  className="absolute right-5 top-[18px] inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 text-[11px] leading-none tracking-[0.12em] text-white/85 shadow-[0_10px_24px_rgba(0,0,0,0.35)] transition hover:bg-white/[0.14] hover:text-white md:right-6 md:top-[26px]"
                 >
-                  <span aria-hidden>←</span>
-                  BACK
+                  <span aria-hidden className="-translate-y-px inline-flex items-center justify-center text-[12px] leading-none">
+                    ←
+                  </span>
+                  <span className="inline-flex items-center leading-none">BACK</span>
                 </Link>
                 <div className="absolute left-5 top-[18px] inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] md:left-6 md:top-[26px]">
                   <Image

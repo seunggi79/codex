@@ -25,12 +25,14 @@ export default function DashboardPage() {
   const [generatedText, setGeneratedText] = useState<string>("");
   const [generatedImageDataUrl, setGeneratedImageDataUrl] = useState<string | null>(null);
   const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
+  const [isGalleryLoading, setIsGalleryLoading] = useState(false);
 
   useEffect(() => {
     if (!session?.access_token || !user?.id) return;
     let canceled = false;
 
     const loadGallery = async () => {
+      setIsGalleryLoading(true);
       try {
         const items = await fetchGalleryThumbnails(session.access_token, 24);
         if (!canceled) {
@@ -39,6 +41,10 @@ export default function DashboardPage() {
       } catch {
         if (!canceled) {
           setGalleryImages([]);
+        }
+      } finally {
+        if (!canceled) {
+          setIsGalleryLoading(false);
         }
       }
     };
@@ -180,7 +186,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <GeneratedGallery items={galleryImages} onDelete={handleDeleteGalleryItem} />
+      <GeneratedGallery items={galleryImages} onDelete={handleDeleteGalleryItem} isLoading={isGalleryLoading} />
     </div>
   );
 }

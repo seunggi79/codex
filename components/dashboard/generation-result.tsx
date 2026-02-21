@@ -19,15 +19,15 @@ export function GenerationResult({ isGenerating, error, imageDataUrl, text }: Ge
         </div>
       ) : null}
 
-      {error ? <p className="mt-4 text-center text-sm text-red-300">{error}</p> : null}
+      {!isGenerating && error ? <p className="mt-4 text-center text-sm text-red-300">{error}</p> : null}
 
-      {imageDataUrl ? (
+      {!isGenerating && imageDataUrl ? (
         <div className="mt-6 overflow-hidden rounded-[24px] bg-gradient-to-br from-white/[0.22] via-white/[0.12] to-white/[0.06] p-2 shadow-[0_16px_44px_rgba(0,0,0,0.45)] backdrop-blur-md">
           <img src={imageDataUrl} alt="Generated thumbnail" className="w-full rounded-[18px] object-cover" />
         </div>
       ) : null}
 
-      {!error && text ? <p className="mt-4 whitespace-pre-line text-sm text-white/80">{text}</p> : null}
+      {!isGenerating && !error && text ? <p className="mt-4 whitespace-pre-line text-sm text-white/80">{text}</p> : null}
     </>
   );
 }
