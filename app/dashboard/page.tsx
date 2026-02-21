@@ -9,15 +9,45 @@ import { GenerationResult } from "@/components/dashboard/generation-result";
 import { GeneratedGallery } from "@/components/dashboard/generated-gallery";
 import { Waves } from "@/components/ui/wave-background";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  fetchGalleryThumbnails,
+  persistGeneratedThumbnail,
+  createSignedThumbnailUrl,
+  deleteGalleryThumbnail,
+  type GalleryItem,
+} from "@/lib/supabase/thumbnails";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, loading, signOut } = useAuth();
+  const { user, session, loading, signOut } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [generatedText, setGeneratedText] = useState<string>("");
   const [generatedImageDataUrl, setGeneratedImageDataUrl] = useState<string | null>(null);
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
+
+  useEffect(() => {
+    if (!session?.access_token || !user?.id) return;
+    let canceled = false;
+
+    const loadGallery = async () => {
+      try {
+        const items = await fetchGalleryThumbnails(session.access_token, 24);
+        if (!canceled) {
+          setGalleryImages(items);
+        }
+      } catch {
+        if (!canceled) {
+          setGalleryImages([]);
+        }
+      }
+    };
+
+    void loadGallery();
+    return () => {
+      canceled = true;
+    };
+  }, [session?.access_token, user?.id]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -66,14 +96,43 @@ export default function DashboardPage() {
       setGeneratedText(result.text ?? "");
       const nextImageDataUrl = result.images?.[0]?.dataUrl ?? null;
       setGeneratedImageDataUrl(nextImageDataUrl);
-      if (nextImageDataUrl) {
-        setGalleryImages((prev) => [nextImageDataUrl, ...prev].slice(0, 24));
+      if (nextImageDataUrl && session?.access_token && user?.id) {
+        try {
+          const saved = await persistGeneratedThumbnail({
+            accessToken: session.access_token,
+            userId: user.id,
+            prompt: payload.prompt,
+            imageDataUrl: nextImageDataUrl,
+          });
+          const signedUrl = await createSignedThumbnailUrl(session.access_token, saved.storagePath);
+          setGalleryImages((prev) => [{ id: saved.id, imageUrl: signedUrl, storagePath: saved.storagePath }, ...prev].slice(0, 24));
+        } catch {
+          setGalleryImages((prev) => [{ id: `local-${Date.now()}-${Math.random()}`, imageUrl: nextImageDataUrl }, ...prev].slice(0, 24));
+        }
+      } else if (nextImageDataUrl) {
+        setGalleryImages((prev) => [{ id: `local-${Date.now()}-${Math.random()}`, imageUrl: nextImageDataUrl }, ...prev].slice(0, 24));
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "이미지 생성 중 오류가 발생했습니다.";
       setGenerationError(message);
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleDeleteGalleryItem = async (item: GalleryItem) => {
+    setGalleryImages((prev) => prev.filter((candidate) => candidate.id !== item.id));
+    if (!session?.access_token) return;
+    if (item.id.startsWith("local-")) return;
+
+    try {
+      await deleteGalleryThumbnail({
+        accessToken: session.access_token,
+        id: item.id,
+        storagePath: item.storagePath,
+      });
+    } catch {
+      setGalleryImages((prev) => [item, ...prev]);
     }
   };
 
@@ -121,7 +180,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <GeneratedGallery images={galleryImages} />
+      <GeneratedGallery items={galleryImages} onDelete={handleDeleteGalleryItem} />
     </div>
   );
 }
