@@ -17,7 +17,7 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
     <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
       <Link
         href="/"
-        className="inline-flex min-h-11 items-center justify-center gap-3 rounded-full border border-white/30 bg-white/[0.08] px-4 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:bg-white/[0.14]"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/[0.08] px-4 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:bg-white/[0.14]"
       >
         <Image
           src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
@@ -26,7 +26,7 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
           height={26}
           priority
         />
-        <span className="text-xs leading-none tracking-[0.18em] text-white/90 md:text-sm">THUMBNAIL AI</span>
+        <span className="translate-y-px text-xs leading-none tracking-[0.18em] text-white/90 md:text-sm">THUMBNAIL AI</span>
       </Link>
 
       <div className="group relative">
