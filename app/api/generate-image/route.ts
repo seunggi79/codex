@@ -13,6 +13,7 @@ type GenerateImageRequest = {
 const PRIMARY_MODEL = "gemini-3-pro-image-preview";
 const FALLBACK_MODEL = "gemini-2.5-flash-image";
 const DUMMY_IMAGES_DIR = path.join(process.cwd(), "public", "dummy_images");
+const isEnabled = (value?: string) => ["1", "true", "yes", "on"].includes((value ?? "").toLowerCase());
 
 const isQuotaExceededError = (status: number, responseText: string) =>
   status === 429 || responseText.includes("RESOURCE_EXHAUSTED") || responseText.includes("Quota exceeded");
@@ -68,6 +69,16 @@ async function getRandomDummyImage() {
 }
 
 export async function POST(request: Request) {
+  if (isEnabled(process.env.FORCE_GENERATE_ERROR)) {
+    return NextResponse.json(
+      {
+        error: "Forced image generation error (test mode).",
+        detail: `FORCE_GENERATE_ERROR is enabled (${process.env.FORCE_GENERATE_ERROR ?? "unset"}).`,
+      },
+      { status: 500 },
+    );
+  }
+
   const dummyImage = await getRandomDummyImage();
   if (dummyImage) {
     return NextResponse.json({
