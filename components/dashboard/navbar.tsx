@@ -10,8 +10,7 @@ type DashboardNavbarProps = {
 };
 
 export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
-  const profileSeed = encodeURIComponent(user.email ?? user.id);
-  const profileImageSrc = `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${profileSeed}`;
+  const profileInitial = (user.email?.trim().charAt(0) || "C").toUpperCase();
 
   return (
     <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
@@ -35,11 +34,12 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
           aria-haspopup="menu"
           className="inline-flex min-h-11 items-center gap-3 rounded-full border border-white/30 bg-white/[0.08] px-3 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:bg-white/[0.14]"
         >
-          <img
-            src={profileImageSrc}
-            alt="Profile"
-            className="h-9 w-9 rounded-full border border-white/35 bg-white/10 object-cover"
-          />
+          <div className="relative h-9 w-9 rotate-[-6deg] overflow-hidden border border-white/35 bg-white/10 [border-radius:42%_58%_61%_39%_/_44%_40%_60%_56%]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.75),rgba(255,255,255,0.15)_46%,rgba(255,255,255,0.06)_75%)]" />
+            <span className="relative z-10 flex h-full w-full items-center justify-center text-[11px] font-semibold tracking-[0.08em] text-black/70">
+              {profileInitial}
+            </span>
+          </div>
           <span className="hidden max-w-[160px] truncate text-xs leading-none tracking-[0.12em] text-white/90 md:block">
             {user.email ?? "CREATOR"}
           </span>
