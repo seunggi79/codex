@@ -39,7 +39,7 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
         <button
           type="button"
           aria-haspopup="menu"
-          className="relative inline-flex h-12 w-22 items-center justify-start gap-3 overflow-hidden rounded-full border border-white/35 bg-white/[0.08] px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all duration-200 hover:h-[52px] hover:w-[168px] hover:border-white/55 hover:bg-white/[0.14]"
+          className="relative inline-flex h-12 w-22 items-center justify-start gap-3 overflow-hidden rounded-full border border-white/35 bg-white/[0.08] px-3 py-2.5 shadow-[0_12px_36px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all duration-200 group-hover:h-[52px] group-hover:w-[168px] group-hover:border-white/55 group-hover:bg-white/[0.14] group-focus-within:h-[52px] group-focus-within:w-[168px] group-focus-within:border-white/55 group-focus-within:bg-white/[0.14]"
         >
           <div className="relative z-20 h-9 w-9 rotate-[-6deg] overflow-hidden border border-white/35 bg-white/10 [border-radius:42%_58%_61%_39%_/_44%_40%_60%_56%]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.75),rgba(255,255,255,0.15)_46%,rgba(255,255,255,0.06)_75%)]" />
@@ -59,7 +59,7 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
           </span>
         </button>
 
-        <div className="pointer-events-none absolute right-0 top-full z-20 mt-2 w-44 translate-y-1 opacity-0 transition duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+        <div className="pointer-events-none absolute right-0 top-full z-20 w-44 translate-y-1 pt-2 opacity-0 transition duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
           <div className="rounded-2xl border border-white/25 bg-black/75 p-2 shadow-[0_14px_40px_rgba(0,0,0,0.5)] backdrop-blur-md">
             <button
               type="button"
