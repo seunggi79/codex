@@ -46,18 +46,22 @@ export default function DashboardPage() {
             <Waves className="h-full w-full" />
             <div className="absolute inset-0 bg-black/35" />
 
-            <div className="relative z-10 flex min-h-[78vh] items-center px-6 md:px-12">
+            <div className="relative z-10 flex min-h-[78vh] items-center justify-center px-6 md:px-12">
               <div className="w-full max-w-4xl">
-                <div className="mb-4 inline-flex min-h-9 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                <div className="mb-4 flex justify-center">
+                  <div className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/45 bg-white/[0.16] px-3.5 py-2 shadow-[0_12px_30px_rgba(0,0,0,0.4)] backdrop-blur-md">
                   <Image
                     src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
                     alt="Brand mark"
-                    width={14}
-                    height={14}
+                    width={15}
+                    height={15}
                   />
-                  <p className="translate-y-px text-[11px] leading-none tracking-[0.14em] text-white/82">DASHBOARD</p>
+                  <p className="translate-y-px text-[11px] leading-none tracking-[0.14em] text-white">DASHBOARD</p>
                 </div>
-                <PromptArea />
+                </div>
+                <div className="mx-auto w-full max-w-3xl">
+                  <PromptArea />
+                </div>
               </div>
             </div>
           </div>
