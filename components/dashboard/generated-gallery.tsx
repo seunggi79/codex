@@ -11,6 +11,7 @@ type GeneratedGalleryProps = {
 
 export function GeneratedGallery({ items, onDelete }: GeneratedGalleryProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
 
   return (
@@ -82,10 +83,38 @@ export function GeneratedGallery({ items, onDelete }: GeneratedGalleryProps) {
                           setDeletingId(null);
                         }
                       }}
-                      className="absolute right-3 top-3 z-10 rounded-full border border-white/45 bg-black/55 px-3 py-1 text-[10px] tracking-[0.12em] text-white opacity-0 transition group-hover:opacity-100 hover:bg-black/75 disabled:cursor-not-allowed disabled:opacity-65"
+                      className="absolute right-3 top-3 z-10 rounded-full border border-red-200/55 bg-gradient-to-r from-red-600/50 to-zinc-500/55 px-3 py-1 text-[10px] tracking-[0.12em] text-white opacity-0 transition group-hover:opacity-100 hover:from-red-600/65 hover:to-zinc-500/70 disabled:cursor-not-allowed disabled:opacity-65"
                       disabled={Boolean(deletingId)}
                     >
                       {deletingId === item.id ? "..." : "DELETE"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async (event) => {
+                        event.stopPropagation();
+                        if (downloadingId) return;
+                        try {
+                          setDownloadingId(item.id);
+                          const response = await fetch(item.imageUrl);
+                          const blob = await response.blob();
+                          const objectUrl = URL.createObjectURL(blob);
+                          const link = document.createElement("a");
+                          link.href = objectUrl;
+                          link.download = `thumbnail-ai-${Date.now()}.png`;
+                          document.body.appendChild(link);
+                          link.click();
+                          link.remove();
+                          URL.revokeObjectURL(objectUrl);
+                        } catch {
+                          window.open(item.imageUrl, "_blank", "noopener,noreferrer");
+                        } finally {
+                          setDownloadingId(null);
+                        }
+                      }}
+                      className="absolute right-3 top-12 z-10 rounded-full border border-white/45 bg-black/55 px-3 py-1 text-[10px] tracking-[0.12em] text-white opacity-0 transition group-hover:opacity-100 hover:bg-black/75 disabled:cursor-not-allowed disabled:opacity-65"
+                      disabled={Boolean(downloadingId)}
+                    >
+                      {downloadingId === item.id ? "..." : "DOWNLOAD"}
                     </button>
                   </div>
                 ))}
