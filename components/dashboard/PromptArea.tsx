@@ -92,8 +92,26 @@ const toolsList = [
   { id: "thinkLonger", name: "Think for longer", shortName: "Think", icon: LightbulbIcon },
 ];
 
-export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  ({ className, ...props }, ref) => {
+export type PromptAreaPayload = {
+  prompt: string;
+  images: { mimeType: string; data: string }[];
+  selectedTool: string | null;
+  useSearch: boolean;
+};
+
+type PromptAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  onGenerate?: (payload: PromptAreaPayload) => Promise<void> | void;
+  loading?: boolean;
+};
+
+const parseImageDataUrl = (dataUrl: string) => {
+  const match = dataUrl.match(/^data:(.+);base64,(.+)$/);
+  if (!match) return null;
+  return { mimeType: match[1], data: match[2] };
+};
+
+export const PromptArea = React.forwardRef<HTMLTextAreaElement, PromptAreaProps>(
+  ({ className, onGenerate, loading = false, ...props }, ref) => {
     const internalTextareaRef = React.useRef<HTMLTextAreaElement>(null);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -102,6 +120,7 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
     const [selectedTool, setSelectedTool] = React.useState<string | null>(null);
     const [isToolsOpen, setIsToolsOpen] = React.useState(false);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     React.useImperativeHandle(ref, () => internalTextareaRef.current!, []);
 
@@ -145,8 +164,31 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
     };
 
     const hasValue = value.trim().length > 0 || Boolean(imagePreview);
+    const isBusy = loading || isSubmitting;
     const activeTool = selectedTool ? toolsList.find((tool) => tool.id === selectedTool) : null;
     const ActiveToolIcon = activeTool?.icon;
+
+    const handleGenerate = async () => {
+      if (!hasValue || isBusy || !onGenerate) return;
+
+      const images = imagePreview ? [parseImageDataUrl(imagePreview)].filter(Boolean) : [];
+      const normalizedImages = images as { mimeType: string; data: string }[];
+
+      try {
+        setIsSubmitting(true);
+        await onGenerate({
+          prompt: value.trim(),
+          images: normalizedImages,
+          selectedTool,
+          useSearch: selectedTool === "searchWeb" || selectedTool === "deepResearch",
+        });
+        setValue("");
+        setImagePreview(null);
+        setSelectedTool(null);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
     return (
       <div
@@ -187,6 +229,12 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
           rows={1}
           value={value}
           onChange={handleInputChange}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              void handleGenerate();
+            }
+          }}
           placeholder="프롬프트를 입력하세요..."
           className="custom-scrollbar min-h-12 w-full resize-none border-0 bg-transparent p-3 text-white placeholder:text-white/55 focus-visible:outline-none"
           {...props}
@@ -197,6 +245,7 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
             <button
               type="button"
               onClick={handlePlusClick}
+              disabled={isBusy}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/[0.06] text-white transition hover:bg-white/[0.14]"
               title="Attach image"
             >
@@ -207,6 +256,7 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
             <div className="relative">
               <button
                 type="button"
+                disabled={isBusy}
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsToolsOpen((prev) => !prev);
@@ -248,6 +298,7 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
                 <div className="h-4 w-px bg-white/25" />
                 <button
                   onClick={() => setSelectedTool(null)}
+                  disabled={isBusy}
                   className="flex h-9 items-center gap-2 rounded-full border border-sky-300/30 bg-sky-300/10 px-3 text-xs text-sky-200 transition hover:bg-sky-300/20"
                 >
                   {ActiveToolIcon ? <ActiveToolIcon className="h-4 w-4" /> : null}
@@ -260,6 +311,7 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
             <div className="ml-auto flex items-center gap-2">
               <button
                 type="button"
+                disabled={isBusy}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/[0.06] text-white transition hover:bg-white/[0.14]"
                 title="Record voice"
               >
@@ -268,8 +320,9 @@ export const PromptArea = React.forwardRef<HTMLTextAreaElement, React.TextareaHT
               </button>
 
               <button
-                type="submit"
-                disabled={!hasValue}
+                type="button"
+                onClick={() => void handleGenerate()}
+                disabled={!hasValue || isBusy}
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition hover:bg-white/85 disabled:cursor-not-allowed disabled:bg-white/40"
                 title="Send"
               >
