@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { DashboardNavbar } from "@/components/dashboard/navbar";
 import { PromptArea, type PromptAreaPayload } from "@/components/dashboard/PromptArea";
 import { Waves } from "@/components/ui/wave-background";
+import { LoadRipple } from "@/components/ui/load-ripple";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function DashboardPage() {
@@ -31,6 +32,7 @@ export default function DashboardPage() {
     setIsGenerating(true);
     setGenerationError(null);
     setGeneratedText("");
+    setGeneratedImageDataUrl(null);
 
     try {
       const response = await fetch("/api/generate-image", {
@@ -109,7 +111,10 @@ export default function DashboardPage() {
                   <PromptArea onGenerate={handleGenerateImage} loading={isGenerating} />
 
                   {isGenerating ? (
-                    <p className="mt-4 text-center text-xs tracking-[0.12em] text-white/75">GENERATING IMAGE...</p>
+                    <div className="flex flex-col items-center">
+                      <LoadRipple />
+                      <p className="mt-2 text-center text-xs tracking-[0.12em] text-white/75">GENERATING IMAGE...</p>
+                    </div>
                   ) : null}
 
                   {generationError ? (
