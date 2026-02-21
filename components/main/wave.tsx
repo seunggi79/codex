@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 import { Waves } from "@/components/ui/wave-background";
+import { OrganicLogoMark } from "@/components/ui/organic-logo-mark";
+import { WaveBoxOverlay } from "@/components/ui/wave-box-overlay";
 
 type WavesDemoProps = {
   ctaHref?: string;
@@ -16,16 +17,13 @@ export function WavesDemo({ ctaHref = "/auth", ctaLabel = "GET STARTED" }: Waves
       <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/[0.08] px-4 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:bg-white/[0.14]"
+          className="relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white/[0.08] px-4 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md transition hover:bg-white/[0.14]"
         >
-          <Image
-            src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
-            alt="Brand mark"
-            width={26}
-            height={26}
-            priority
-          />
-          <span className="translate-y-px text-xs leading-none tracking-[0.18em] text-white/90 md:text-sm">THUMBNAIL AI</span>
+          <WaveBoxOverlay className="opacity-90" />
+          <span className="relative z-10 inline-flex items-center gap-2">
+            <OrganicLogoMark size={26} />
+            <span className="translate-y-px text-xs leading-none tracking-[0.18em] text-white/90 md:text-sm">THUMBNAIL AI</span>
+          </span>
         </Link>
 
         <div className="hidden items-center gap-2 md:flex">

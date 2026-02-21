@@ -1,0 +1,19 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(88 74) rotate(34) scale(140 120)">
+      <stop offset="0" stop-color="white" stop-opacity="0.88"/>
+      <stop offset="0.42" stop-color="white" stop-opacity="0.2"/>
+      <stop offset="0.74" stop-color="white" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="s" x="14" y="14" width="228" height="228" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="black" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#s)">
+    <path d="M64 47C92 28 128 30 157 43C184 55 215 77 216 111C217 143 198 169 181 190C165 211 146 228 122 229C95 230 72 213 55 194C37 174 24 148 26 120C28 90 39 65 64 47Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.35)"/>
+    <path d="M64 47C92 28 128 30 157 43C184 55 215 77 216 111C217 143 198 169 181 190C165 211 146 228 122 229C95 230 72 213 55 194C37 174 24 148 26 120C28 90 39 65 64 47Z" fill="url(#g)"/>
+    <ellipse cx="128" cy="128" rx="38" ry="38" fill="black" fill-opacity="0.2"/>
+  </g>
+</svg>
