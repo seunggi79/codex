@@ -54,8 +54,8 @@ export function DashboardNavbar({ user, onSignOut }: DashboardNavbarProps) {
               {profileInitial}
             </span>
           </div>
-          <span className="pointer-events-none absolute left-[54px] top-1/2 z-10 h-6 w-5 -translate-y-1/2 overflow-hidden rounded-full border border-white/35 bg-white/[0.16] shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-250 group-hover:h-7 group-hover:w-[104px] group-hover:border-white/80 group-hover:shadow-[0_10px_24px_rgba(255,255,255,0.2)]">
-            <WaveBoxOverlay className="opacity-80 transition-all duration-200 group-hover:opacity-100 group-hover:[filter:hue-rotate(185deg)_saturate(260%)_brightness(190%)_contrast(135%)]" />
+          <span className="pointer-events-none absolute left-[54px] top-1/2 z-10 h-6 w-5 -translate-y-1/2 overflow-hidden rounded-full border border-white/35 bg-white/[0.16] shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-250 group-hover:h-7 group-hover:w-[104px] group-hover:border-white/95 group-hover:bg-white/[0.42] group-hover:shadow-[0_10px_24px_rgba(255,255,255,0.32)]">
+            <WaveBoxOverlay className="opacity-80 transition-all duration-200 group-hover:opacity-100 group-hover:[filter:brightness(240%)_contrast(145%)]" />
           </span>
         </button>
 
