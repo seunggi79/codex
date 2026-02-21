@@ -25,7 +25,7 @@ export default function AuthCallbackPage() {
         return;
       }
 
-      router.replace("/");
+      router.replace("/dashboard");
     };
 
     handleCallback();

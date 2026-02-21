@@ -13,6 +13,7 @@ import { supabase, type AuthSession, type AuthUser } from "@/lib/supabase/client
 type AuthContextValue = {
   user: AuthUser | null;
   session: AuthSession | null;
+  isAuthenticated: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 };
@@ -53,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       user: session?.user ?? null,
       session,
+      isAuthenticated: Boolean(session?.user),
       loading,
       signOut: async () => {
         await supabase.auth.signOut();

@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase/client";
 import { Waves } from "@/components/ui/wave-background";
 
 export default function AuthPage() {
+  const router = useRouter();
   const { user, loading, signOut } = useAuth();
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -20,7 +22,6 @@ export default function AuthPage() {
     if (!callbackUrl) return;
     setAuthError(null);
     setAuthLoading(true);
-    await signOut();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -34,18 +35,18 @@ export default function AuthPage() {
     }
   };
 
-  const handleSignOut = async () => {
-    setAuthLoading(true);
-    await signOut();
-    setAuthLoading(false);
-  };
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard");
+    }
+  }, [loading, router, user]);
 
   const isBusy = loading || authLoading;
 
   return (
     <div className="min-h-screen w-full bg-black text-white">
       <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
-        <div className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
             alt="Brand mark"
@@ -54,7 +55,7 @@ export default function AuthPage() {
             priority
           />
           <span className="text-sm tracking-[0.18em] text-white/85">THUMBNAIL AI</span>
-        </div>
+        </Link>
       </nav>
 
       <section className="w-full px-4 pb-6 md:px-6 md:pb-8">
@@ -84,31 +85,27 @@ export default function AuthPage() {
                 </p>
                 {authError ? <p className="mt-4 text-sm text-red-300">{authError}</p> : null}
 
-                {user ? (
-                  <>
-                    <p className="mt-8 text-xs tracking-[0.12em] text-white/75">
-                      LOGGED IN AS {user.email}
-                    </p>
-                    <button
-                      onClick={handleSignOut}
-                      disabled={isBusy}
-                      className="group mt-3 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      SIGN OUT
-                    </button>
-                  </>
-                ) : (
+                <button
+                  onClick={handleGoogleLogin}
+                  disabled={isBusy}
+                  className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
+                    G
+                  </span>
+                  {isBusy ? "LOADING..." : "CONTINUE WITH GOOGLE"}
+                </button>
+
+                {!loading && user ? (
                   <button
-                    onClick={handleGoogleLogin}
-                    disabled={isBusy}
-                    className="group mt-8 flex w-full items-center justify-center gap-3 rounded-full border border-white/40 bg-white/[0.08] px-6 py-3 text-xs tracking-[0.14em] text-white transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={async () => {
+                      await signOut();
+                    }}
+                    className="mt-3 w-full rounded-full border border-white/25 bg-black/30 px-6 py-3 text-xs tracking-[0.14em] text-white/85 transition hover:bg-black/45"
                   >
-                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
-                      G
-                    </span>
-                    {isBusy ? "LOADING..." : "CONTINUE WITH GOOGLE"}
+                    다른 계정으로 로그인
                   </button>
-                )}
+                ) : null}
               </div>
             </div>
           </div>
