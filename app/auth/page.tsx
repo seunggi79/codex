@@ -71,15 +71,15 @@ export default function AuthPage() {
             <div className="absolute inset-0 bg-black/45" />
 
             <div className="relative z-10 flex min-h-[78vh] items-center px-6 md:px-12">
-              <div className="relative w-full max-w-lg rounded-[30px] border border-white/30 bg-white/[0.08] p-6 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl md:p-8">
+              <div className="relative w-full max-w-lg rounded-[30px] border border-white/30 bg-white/[0.08] p-5 shadow-[0_16px_48px_rgba(0,0,0,0.5)] backdrop-blur-xl md:p-6">
                 <Link
                   href="/"
-                  className="absolute right-6 top-6 inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 text-[11px] leading-none tracking-[0.12em] text-white/85 shadow-[0_10px_24px_rgba(0,0,0,0.35)] transition hover:bg-white/[0.14] hover:text-white md:right-8 md:top-8"
+                  className="absolute right-5 top-5 inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 text-[11px] leading-none tracking-[0.12em] text-white/85 shadow-[0_10px_24px_rgba(0,0,0,0.35)] transition hover:bg-white/[0.14] hover:text-white md:right-6 md:top-7"
                 >
                   <span aria-hidden>←</span>
                   BACK
                 </Link>
-                <div className="absolute left-6 top-[22px] inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] md:left-8 md:top-[30px]">
+                <div className="absolute left-5 top-[18px] inline-flex min-h-8 items-center gap-2 rounded-full border border-white/25 bg-white/[0.07] px-3 py-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] md:left-6 md:top-[26px]">
                   <Image
                     src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
                     alt="Brand mark"
@@ -89,12 +89,10 @@ export default function AuthPage() {
                   <p className="translate-y-px text-[11px] leading-none tracking-[0.14em] text-white/82">WELCOME</p>
                 </div>
                 <h1 className="mt-14 text-4xl font-semibold leading-[1.04] tracking-tight md:mt-16 md:text-5xl">
-                  Google로
-                  <br />
-                  빠르게 시작하세요
+                  Google로 로그인
                 </h1>
                 <p className="mt-4 text-sm text-white/78 md:text-base">
-                  로그인과 회원가입은 자동으로 처리됩니다. Google 계정 하나로 바로 이용할 수 있습니다.
+                  Google 계정으로 로그인하면 바로 대시보드로 이동합니다.
                 </p>
                 {authError ? <p className="mt-4 text-sm text-red-300">{authError}</p> : null}
 
