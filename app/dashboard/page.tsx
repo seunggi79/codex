@@ -6,6 +6,7 @@ import { DashboardNavbar } from "@/components/dashboard/navbar";
 import { PromptArea, type PromptAreaPayload } from "@/components/dashboard/PromptArea";
 import { SectionBadge } from "@/components/dashboard/section-badge";
 import { GenerationResult } from "@/components/dashboard/generation-result";
+import { GeneratedGallery } from "@/components/dashboard/generated-gallery";
 import { Waves } from "@/components/ui/wave-background";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,6 +17,7 @@ export default function DashboardPage() {
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [generatedText, setGeneratedText] = useState<string>("");
   const [generatedImageDataUrl, setGeneratedImageDataUrl] = useState<string | null>(null);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -62,7 +64,11 @@ export default function DashboardPage() {
       }
 
       setGeneratedText(result.text ?? "");
-      setGeneratedImageDataUrl(result.images?.[0]?.dataUrl ?? null);
+      const nextImageDataUrl = result.images?.[0]?.dataUrl ?? null;
+      setGeneratedImageDataUrl(nextImageDataUrl);
+      if (nextImageDataUrl) {
+        setGalleryImages((prev) => [nextImageDataUrl, ...prev].slice(0, 24));
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "이미지 생성 중 오류가 발생했습니다.";
       setGenerationError(message);
@@ -114,6 +120,8 @@ export default function DashboardPage() {
           <div className="h-px w-full bg-white/80" />
         </div>
       </section>
+
+      <GeneratedGallery images={galleryImages} />
     </div>
   );
 }
