@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { DashboardNavbar } from "@/components/dashboard/navbar";
 import { Waves } from "@/components/ui/wave-background";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -36,25 +36,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen w-full bg-black text-white">
-      <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/navbar_mark_png_pack/navbar_mark_mono_light_64.png"
-            alt="Brand mark"
-            width={28}
-            height={28}
-            priority
-          />
-          <span className="text-sm tracking-[0.18em] text-white/85">THUMBNAIL AI</span>
-        </Link>
-
-        <button
-          onClick={handleSignOut}
-          className="rounded-full border border-white/35 bg-white/[0.08] px-4 py-2 text-xs tracking-[0.12em] text-white transition hover:bg-white/20"
-        >
-          SIGN OUT
-        </button>
-      </nav>
+      <DashboardNavbar user={user} onSignOut={handleSignOut} />
 
       <section className="w-full px-4 pb-6 md:px-6 md:pb-8">
         <div className="mx-auto w-full max-w-7xl">
